@@ -14,7 +14,7 @@ RSpec.describe SigninController, type: :controller do
       expect(response.cookies[JWTSessions.access_cookie]).to be_present
     end
 
-    it 'returns http success' do
+    it 'returns unauthorized for invalid params' do
       post :create, params: { email: user.email, password: 'incorrect' }
       expect(response).to have_http_status(401)
     end
