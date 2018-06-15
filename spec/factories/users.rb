@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    email "MyString"
-    password_digest "MyString"
+    sequence(:email) { |n| "email-#{n}@test.com" }
+    password 'password'
   end
 end
