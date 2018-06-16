@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  post 'refresh/create'
-  post 'signin/create'
-  post 'signup/create'
-  delete 'signin/destroy'
+  post 'refresh', controller: :refresh, action: :create
+  post 'signin', controller: :signin, action: :create
+  post 'signup', controller: :signup, action: :create
+  delete 'signin', controller: :signin, action: :destroy
 
   resources :todos
 end

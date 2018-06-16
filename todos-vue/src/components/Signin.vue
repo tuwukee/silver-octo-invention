@@ -1,5 +1,5 @@
 <template>
-  <form class="form-signin">
+  <form class="form-signin" @submit.prevent="signin">
     <div class="form-group">
       <label for="email">Email address</label>
       <input v-model="email" type="email" class="form-control" id="email" placeholder="email@example.com">
@@ -8,7 +8,7 @@
       <label for="password">Password</label>
       <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
     </div>
-    <button type="submit" class="btn btn-primary mb-3" @submit.prevent="signin">Sign in</button>
+    <button type="submit" class="btn btn-primary mb-3">Sign in</button>
     <div>
       <a href="#">Forgot password?</a>
       <a href="#">Sign up</a>
@@ -26,9 +26,25 @@ export default {
     }
   },
   methods: {
-    sigin () {
-      console.log(this.email)
-      console.log(this.password)
+    signin () {
+      this.$http.post('/signin', { user: this.email, password: this.password })
+        .then(response => this.signinSuccessful(response))
+        .catch(response => this.signinFailed(response))
+    },
+    signinSuccessful (response) {
+      console.log(11234)
+      if (!response.data.csrf) {
+        this.signinFailed(response)
+        return
+      }
+      localStorage.csrf = response.data.csrf
+      this.error = false
+      this.$router.replace(this.$route.query.redirect || '/todos')
+    },
+    signinFailed (response) {
+      console.log(response)
+      this.error = response.data.error
+      delete localStorage.csrf
     }
   }
 }
