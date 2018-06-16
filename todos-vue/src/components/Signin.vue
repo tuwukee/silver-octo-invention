@@ -1,16 +1,18 @@
 <template>
-  <form class="px-4 py-3">
+  <form class="form-signin">
     <div class="form-group">
-      <label for="exampleDropdownFormEmail1">Email address</label>
-      <input v-model="email" type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+      <label for="email">Email address</label>
+      <input v-model="email" type="email" class="form-control" id="email" placeholder="email@example.com">
     </div>
     <div class="form-group">
-      <label for="exampleDropdownFormPassword1">Password</label>
-      <input v-model="password" type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+      <label for="password">Password</label>
+      <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
     </div>
-    <button type="submit" class="btn btn-primary" @submit.prevent="signin">Sign in</button>
-    <a class="dropdown-item" href="#">New around here? Sign up</a>
-    <a class="dropdown-item" href="#">Forgot password?</a>
+    <button type="submit" class="btn btn-primary mb-3" @submit.prevent="signin">Sign in</button>
+    <div>
+      <a href="#">Forgot password?</a>
+      <a href="#">Sign up</a>
+    </div>
   </form>
 </template>
 
@@ -31,3 +33,12 @@ export default {
   }
 }
 </script>
+
+<style lang="css">
+.form-signin {
+  width: 70%;
+  max-width: 500px;
+  padding: 10% 15px;
+  margin: 0 auto;
+}
+</style>
