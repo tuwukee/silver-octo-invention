@@ -7,7 +7,10 @@ class RefreshController < ApplicationController
     tokens = session.refresh_by_access(found_token) do
       raise JWTSessions::Errors::Unauthorized, 'Malicious activity detected'
     end
-    cookies[JWTSessions.access_cookie] = { value: tokens[:access], httponly: true }
+    response.set_cookie(JWTSessions.access_cookie,
+                        value: tokens[:access],
+                        httponly: true,
+                        secure: Rails.env.production?)
 
     render json: { csrf: tokens[:csrf] }
   end

@@ -15,7 +15,7 @@
     </div>
     <button type="submit" class="btn btn-primary mb-3">Sign up</button>
     <div>
-      <router-link to="/signin">Sign in</router-link>
+      <router-link to="/">Sign in</router-link>
     </div>
   </form>
 </template>
@@ -31,11 +31,17 @@ export default {
       error: ''
     }
   },
+  created () {
+    this.checkSignedIn()
+  },
+  updated () {
+    this.checkSignedIn()
+  },
   methods: {
     signup () {
-      this.$http.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
+      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
         .then(response => this.signupSuccessful(response))
-        .catch((error) => this.signupFailed(error))
+        .catch(error => this.signupFailed(error))
     },
     signupSuccessful (response) {
       if (!response.data.csrf) {
@@ -43,12 +49,19 @@ export default {
         return
       }
       localStorage.csrf = response.data.csrf
+      localStorage.signedIn = true
       this.error = ''
-      this.$router.replace(this.$route.query.redirect || '/todos')
+      this.$router.replace('/todos')
     },
     signupFailed (error) {
-      this.error = error.response.data.error
+      this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
+      delete localStorage.signedIn
+    },
+    checkSignedIn () {
+      if (localStorage.signedIn) {
+        this.$router.replace('/todos')
+      }
     }
   }
 }

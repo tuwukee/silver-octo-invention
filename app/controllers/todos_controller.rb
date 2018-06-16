@@ -4,6 +4,7 @@ class TodosController < ApplicationController
 
   # GET /todos
   def index
+    # binding.pry
     @todos = current_user.todos
 
     render json: @todos

@@ -26,11 +26,17 @@ export default {
       error: ''
     }
   },
+  created () {
+    this.checkSignedIn()
+  },
+  updated () {
+    this.checkSignedIn()
+  },
   methods: {
     signin () {
-      this.$http.post('/signin', { email: this.email, password: this.password })
+      this.$http.plain.post('/signin', { email: this.email, password: this.password })
         .then(response => this.signinSuccessful(response))
-        .catch((error) => this.signinFailed(error))
+        .catch(error => this.signinFailed(error))
     },
     signinSuccessful (response) {
       if (!response.data.csrf) {
@@ -38,12 +44,19 @@ export default {
         return
       }
       localStorage.csrf = response.data.csrf
+      localStorage.signedIn = true
       this.error = ''
-      this.$router.replace(this.$route.query.redirect || '/todos')
+      this.$router.replace('/todos')
     },
     signinFailed (error) {
-      this.error = error.response.data.error
+      this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
+      delete localStorage.signedIn
+    },
+    checkSignedIn () {
+      if (localStorage.signedIn) {
+        this.$router.replace('/todos')
+      }
     }
   }
 }
