@@ -1,5 +1,6 @@
 class SigninController < ApplicationController
   include ActionController::Cookies
+  before_action :authorize_access_request!, only: [:destroy]
 
   def create
     user = User.find_by!(email: params[:email])
@@ -13,5 +14,11 @@ class SigninController < ApplicationController
     else
       not_authorized
     end
+  end
+
+  def destroy
+    session = JWTSessions::Session.new
+    session.flush_by_access_token(found_token)
+    render json: :ok
   end
 end

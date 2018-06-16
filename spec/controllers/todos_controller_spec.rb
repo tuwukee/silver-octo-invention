@@ -23,7 +23,7 @@ RSpec.describe TodosController, type: :controller do
     it 'returns a success response' do
       request.cookies[JWTSessions.access_cookie] = @tokens[:access]
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response_json.size).to eq 1
       expect(response_json.first['id']).to eq todo.id
     end
@@ -41,7 +41,7 @@ RSpec.describe TodosController, type: :controller do
     it 'returns a success response' do
       request.cookies[JWTSessions.access_cookie] = @tokens[:access]
       get :show, params: { id: todo.id }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 

@@ -1,16 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe RefreshController, type: :controller do
+  let(:access_token) { "Bearer #{@tokens[:access]}" }
+  let(:access_cookie) { @tokens[:access] }
+  let(:csrf_token) { @tokens[:csrf] }
+
+  before do
+    payload = { user_id: user.id }
+    session = JWTSessions::Session.new(payload: payload)
+    @tokens = session.login
+  end
 
   describe "GET #create" do
     let(:user) { create(:user) }
 
     context 'success' do
-      let(:access_token) { "Bearer #{@tokens[:access]}" }
-      let(:access_cookie) { @tokens[:access] }
-      let(:csrf_token) { @tokens[:csrf] }
-
       before do
+        # set expiration time to 0 to create an already expired access token
         JWTSessions.access_exp_time = 0
         payload = { user_id: user.id }
         session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)

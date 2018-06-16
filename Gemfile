@@ -14,7 +14,8 @@ gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 # Use JWTSessions to build JWT auth
-gem 'jwt_sessions', '~> 1.3'
+#gem 'jwt_sessions', '~> 1.3'
+gem 'jwt_sessions', :git => 'https://github.com/tuwukee/jwt_sessions.git', :branch => 'access-by-refresh-upgrade'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
