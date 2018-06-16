@@ -1,5 +1,5 @@
 <template>
-  <form class="form-signin" @submit.prevent="signin">
+  <form class="form-signup" @submit.prevent="signup">
     <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <div class="form-group">
       <label for="email">Email address</label>
@@ -9,39 +9,44 @@
       <label for="password">Password</label>
       <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
     </div>
-    <button type="submit" class="btn btn-primary mb-3">Sign in</button>
+    <div class="form-group">
+      <label for="password">Password Confirmation</label>
+      <input v-model="password_confirmation" type="password" class="form-control" id="password_confirmation" placeholder="Password Confirmation">
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Sign up</button>
     <div>
-      <router-link to="/signup">Sign up</router-link>
+      <router-link to="/signin">Sign in</router-link>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  name: 'Signin',
+  name: 'Signup',
   data () {
     return {
       email: '',
       password: '',
+      password_confirmation: '',
       error: ''
     }
   },
   methods: {
-    signin () {
-      this.$http.post('/signin', { email: this.email, password: this.password })
-        .then(response => this.signinSuccessful(response))
-        .catch((error) => this.signinFailed(error))
+    signup () {
+      this.$http.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
+        .then(response => this.signupSuccessful(response))
+        .catch((error) => this.signupFailed(error))
     },
-    signinSuccessful (response) {
+    signupSuccessful (response) {
       if (!response.data.csrf) {
-        this.signinFailed(response)
+        this.signupFailed(response)
         return
       }
       localStorage.csrf = response.data.csrf
       this.error = ''
       this.$router.replace(this.$route.query.redirect || '/todos')
     },
-    signinFailed (error) {
+    signupFailed (error) {
       this.error = error.response.data.error
       delete localStorage.csrf
     }
@@ -50,7 +55,7 @@ export default {
 </script>
 
 <style lang="css">
-.form-signin {
+.form-signup {
   width: 70%;
   max-width: 500px;
   padding: 10% 15px;

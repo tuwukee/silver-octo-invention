@@ -21,4 +21,10 @@ class SigninController < ApplicationController
     session.flush_by_access_token(found_token)
     render json: :ok
   end
+
+  private
+
+  def not_found
+    render json: { error: 'Cannont find such email/password combination' }, status: :not_found
+  end
 end
