@@ -1,6 +1,4 @@
 class SignupController < ApplicationController
-  include ActionController::Cookies
-
   def create
     user = User.new(user_params)
     if user.save

@@ -1,5 +1,4 @@
 class SigninController < ApplicationController
-  include ActionController::Cookies
   before_action :authorize_access_request!, only: [:destroy]
 
   def create
