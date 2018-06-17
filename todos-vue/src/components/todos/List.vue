@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div class="todos">
+    <div class="sign-out float-right">
+      <label @click="signOut">Sign out</label>
+    </div>
+    <br />
     <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <h3>Todos</h3>
     <input class="form-control"
@@ -10,14 +14,13 @@
     <br />
     <ul class="list-group">
       <li class="list-group-item" v-for="todo in todos" :key="todo.id" :todo="todo">
-        <div v-show="todo != editedTodo">
-          <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
-          <button class="btn btn-danger btn-xs float-right" @click="removeTodo(todo)">x</button>
+        <div v-show="todo != editedTodo" @dblclick="editTodo(todo)">
+          <label>{{ todo.title }}</label>
+          <i class="fa fa-trash-alt float-right" @click="removeTodo(todo)"></i>
         </div>
         <div v-show="todo == editedTodo">
           <input class="form-control"
             v-todo-focus
-            @blur="updateTodo(todo)"
             @keyup.enter="updateTodo(todo)"
             v-model="todo.title"
           />
@@ -44,7 +47,7 @@ export default {
     } else {
       this.$http.secured.get('/todos')
         .then(response => { this.todos = response.data })
-        .catch(error => {  this.setError('Something went wrong') })
+        .catch(error => { this.setError(error, 'Something went wrong') })
     }
   },
   methods: {
@@ -83,6 +86,17 @@ export default {
         .catch(error => {
           this.setError(error, 'Cannot update todo')
         })
+    },
+    signOut () {
+      this.$http.secured.delete('/signin')
+        .then(response => {
+          delete localStorage.csrf
+          delete localStorage.signedIn
+          this.$router.replace('/')
+        })
+        .catch(error => {
+          this.setError(error, 'Cannot sign out')
+        })
     }
   },
   directives: {
@@ -93,3 +107,20 @@ export default {
 }
 </script>
 
+<style lang="css">
+.todos ul li i.fa.fa-trash-alt {
+  visibility: hidden;
+  margin-top: 5px;
+}
+.todos ul li:hover {
+  background: #fcfcfc;
+}
+
+.todos ul li:hover i.fa.fa-trash-alt {
+  visibility: visible;
+}
+
+.sign-out label {
+  cursor: pointer;
+}
+</style>

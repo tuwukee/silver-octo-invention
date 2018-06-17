@@ -30,7 +30,7 @@ securedAxiosInstance.interceptors.request.use(config => {
 })
 
 securedAxiosInstance.interceptors.response.use(null, error => {
-  if (error.config && error.response && error.response.status === 401) {
+  if (error.response && error.response.config && error.response.status === 401) {
     // In case 401 is caused by expired access cookie - we'll do refresh request
     return plainAxiosInstance.post('/refresh', {}, { headers: { 'X-CSRF-TOKEN': localStorage.csrf } })
       .then(response => {
@@ -40,8 +40,7 @@ securedAxiosInstance.interceptors.response.use(null, error => {
         let retryConfig = error.response.config
         retryConfig.headers['X-CSRF-TOKEN'] = localStorage.csrf
         return plainAxiosInstance.request(retryConfig)
-
-      }).catch(() => {
+      }).catch(error => {
         delete localStorage.csrf
         delete localStorage.signedIn
         // redirect to signin in case refresh request fails
