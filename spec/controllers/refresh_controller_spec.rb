@@ -4,12 +4,6 @@ RSpec.describe RefreshController, type: :controller do
   let(:access_cookie) { @tokens[:access] }
   let(:csrf_token) { @tokens[:csrf] }
 
-  before do
-    payload = { user_id: user.id }
-    session = JWTSessions::Session.new(payload: payload)
-    @tokens = session.login
-  end
-
   describe "GET #create" do
     let(:user) { create(:user) }
 

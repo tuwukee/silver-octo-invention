@@ -64,18 +64,12 @@ export default {
           this.todos.push(response.data)
           this.newTodo = ''
         })
-        .catch(error => {
-          this.error = this.setError(error, 'Cannot create todo')
-        })
+        .catch(error => this.setError(error, 'Cannot create todo'))
     },
     removeTodo (todo) {
       this.$http.secured.delete(`/todos/${todo.id}`)
-        .then(response => {
-          this.todos.splice(this.todos.indexOf(todo), 1)
-        })
-        .catch(error => {
-          this.setError(error, 'Cannot delete todo')
-        })
+        .then(response => this.todos.splice(this.todos.indexOf(todo), 1))
+        .catch(error => this.setError(error, 'Cannot delete todo'))
     },
     editTodo (todo) {
       this.editedTodo = todo
@@ -83,9 +77,7 @@ export default {
     updateTodo (todo) {
       this.editedTodo = ''
       this.$http.secured.patch(`/todos/${todo.id}`, { todo: { title: todo.title } })
-        .catch(error => {
-          this.setError(error, 'Cannot update todo')
-        })
+        .catch(error => this.setError(error, 'Cannot update todo'))
     },
     signOut () {
       this.$http.secured.delete('/signin')
@@ -94,9 +86,7 @@ export default {
           delete localStorage.signedIn
           this.$router.replace('/')
         })
-        .catch(error => {
-          this.setError(error, 'Cannot sign out')
-        })
+        .catch(error => this.setError(error, 'Cannot sign out'))
     }
   },
   directives: {
