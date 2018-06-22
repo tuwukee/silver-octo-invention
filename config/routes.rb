@@ -6,4 +6,10 @@ Rails.application.routes.draw do
   get 'me', controller: :users, action: :me
 
   resources :todos
+
+  namespace :admin do
+    resources :users, only: [:index] do
+      resources :todos, only: [:index], controller: 'users/todos'
+    end
+  end
 end
