@@ -23,7 +23,7 @@ RSpec.describe Admin::UsersController, type: :controller do
     it 'does not allow regular user to receive users list' do
       sign_in_as(user)
       get :index
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
     end
   end
 end

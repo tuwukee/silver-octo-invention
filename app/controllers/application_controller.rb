@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include JWTSessions::RailsAuthorization
   rescue_from JWTSessions::Errors::Unauthorized, with: :not_authorized
+  rescue_from JWTSessions::Errors::ClaimsVerification, with: :forbidden
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   private
@@ -15,5 +16,9 @@ class ApplicationController < ActionController::API
 
   def not_found
     render json: { error: 'Not found' }, status: :not_found
+  end
+
+  def forbidden
+    render json: { error: 'Forbidden' }, status: :forbidden
   end
 end

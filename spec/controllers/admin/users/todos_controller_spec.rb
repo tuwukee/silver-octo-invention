@@ -19,13 +19,13 @@ RSpec.describe Admin::Users::TodosController, type: :controller do
     it 'allows manager to receive users list' do
       sign_in_as(manager)
       get :index, params: { user_id: user.id }
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
     end
 
     it 'does not allow regular user to receive users list' do
       sign_in_as(user)
       get :index, params: { user_id: user.id }
-      expect(response).to have_http_status(401)
+      expect(response).to have_http_status(403)
     end
   end
 end
