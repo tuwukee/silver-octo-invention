@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2018_06_22_175133) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "role", default: "user", null: false
+    t.integer "role", default: 0, null: false
     t.index ["email"], name: "index_users_on_email"
   end
 
