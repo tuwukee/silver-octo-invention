@@ -6,9 +6,16 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     currentUser: {},
-    signedIn: false,
     csrf: null,
     todos: []
+  },
+  getters: {
+    isAdmin (state) {
+      return state.currentUser && state.currentUser.role === 'admin'
+    },
+    isManager (state) {
+      return state.currentUser && state.currentUser.role === 'manager'
+    }
   },
   mutations: {
     setCurrentUser (state, { currentUser, csrf }) {
@@ -24,12 +31,6 @@ export const store = new Vuex.Store({
     refresh (state, csrf) {
       state.signedIn = true
       state.csrf = csrf
-    },
-    addTodo (state, newTodo) {
-
-    },
-    fetchTodos (state, todos) {
-
     }
   },
   plugins: [createPersistedState()]

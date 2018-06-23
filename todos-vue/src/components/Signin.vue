@@ -17,51 +17,51 @@
 </template>
 
 <script>
-  export default {
-    name: 'Signin',
-    data () {
-      return {
-        email: '',
-        password: '',
-        error: ''
+export default {
+  name: 'Signin',
+  data () {
+    return {
+      email: '',
+      password: '',
+      error: ''
+    }
+  },
+  created () {
+    this.checkSignedIn()
+  },
+  updated () {
+    this.checkSignedIn()
+  },
+  methods: {
+    signin () {
+      this.$http.plain.post('/signin', { email: this.email, password: this.password })
+        .then(response => this.signinSuccessful(response))
+        .catch(error => this.signinFailed(error))
+    },
+    signinSuccessful (response) {
+      if (!response.data.csrf) {
+        this.signinFailed(response)
+        return
       }
-    },
-    created () {
-      this.checkSignedIn()
-    },
-    updated () {
-      this.checkSignedIn()
-    },
-    methods: {
-      signin () {
-        this.$http.plain.post('/signin', { email: this.email, password: this.password })
-          .then(response => this.signinSuccessful(response))
-          .catch(error => this.signinFailed(error))
-      },
-      signinSuccessful (response) {
-        if (!response.data.csrf) {
-          this.signinFailed(response)
-          return
-        }
-        this.$http.plain.get('/me')
-          .then(meResponse => {
-            this.$store.commit('setCurrentUser', { currentUser: meResponse.data, csrf: response.data.csrf })
-            this.error = ''
-            this.$router.replace('/todos')
-          })
-          .catch(error => this.signinFailed(error))
-      },
-      signinFailed (error) {
-        this.error = (error.response && error.response.data && error.response.data.error) || ''
-        this.$store.commit('unsetCurrentUser')
-      },
-      checkSignedIn () {
-        if (this.$store.state.signedIn) {
+      this.$http.plain.get('/me')
+        .then(meResponse => {
+          this.$store.commit('setCurrentUser', { currentUser: meResponse.data, csrf: response.data.csrf })
+          this.error = ''
           this.$router.replace('/todos')
-        }
+        })
+        .catch(error => this.signinFailed(error))
+    },
+    signinFailed (error) {
+      this.error = (error.response && error.response.data && error.response.data.error) || ''
+      this.$store.commit('unsetCurrentUser')
+    },
+    checkSignedIn () {
+      if (this.$store.state.signedIn) {
+        this.$router.replace('/todos')
       }
     }
   }
+}
 </script>
 
 <style lang="css">
