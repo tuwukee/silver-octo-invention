@@ -18,7 +18,9 @@
           <th>{{ user.id }}</th>
           <td>{{ user.email }}</td>
           <td>{{ user.role }}</td>
-          <td v-if="showTodosLink()">-</td>
+          <td v-if="showTodosLink()">
+            <i class="fa fa-list-ul"></i>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -56,3 +58,9 @@ export default {
   components: { AppHeader }
 }
 </script>
+
+<style lang="css">
+  i.fa {
+    cursor: pointer;
+  }
+</style>

@@ -32,8 +32,6 @@ export default {
         .catch(error => this.setError(error, 'Cannot sign out'))
     },
     showAdminLink () {
-      console.log(111)
-      console.log(this.$store.getters.isAdmin || this.$store.getters.isManager)
       return (this.$store.getters.isAdmin || this.$store.getters.isManager)
     }
   }
