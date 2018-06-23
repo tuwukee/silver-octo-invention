@@ -7,11 +7,11 @@ export const store = new Vuex.Store({
   state: {
     currentUser: {},
     signedIn: false,
-    csrf: null
+    csrf: null,
+    todos: []
   },
   mutations: {
     setCurrentUser (state, { currentUser, csrf }) {
-      console.log(currentUser, csrf)
       state.currentUser = currentUser
       state.signedIn = true
       state.csrf = csrf
@@ -24,6 +24,12 @@ export const store = new Vuex.Store({
     refresh (state, csrf) {
       state.signedIn = true
       state.csrf = csrf
+    },
+    addTodo (state, newTodo) {
+
+    },
+    fetchTodos (state, todos) {
+
     }
   },
   plugins: [createPersistedState()]

@@ -1,9 +1,6 @@
 <template>
   <div class="todos">
-    <div class="sign-out float-right">
-      <label @click="signOut">Sign out</label>
-    </div>
-    <br />
+    <AppHeader></AppHeader>
     <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <h3>Todos</h3>
     <input class="form-control"
@@ -31,86 +28,77 @@
 </template>
 
 <script>
-export default {
-  name: 'List',
-  data () {
-    return {
-      todos: [],
-      newTodo: [],
-      error: '',
-      editedTodo: ''
-    }
-  },
-  created () {
-    console.log(this.$store.state.signedIn)
-    if (!this.$store.state.signedIn) {
-      this.$router.replace('/')
-    } else {
-      this.$http.secured.get('/todos')
-        .then(response => { this.todos = response.data })
-        .catch(error => { this.setError(error, 'Something went wrong') })
-    }
-  },
-  methods: {
-    setError (error, text) {
-      this.error = (error.response && error.response.data && error.response.data.error) || text
-    },
-    addTodo () {
-      const value = this.newTodo && this.newTodo.trim()
-      if (!value) {
-        return
+  import AppHeader from '@/components/AppHeader'
+
+  export default {
+    name: 'List',
+    data () {
+      return {
+        todos: [],
+        newTodo: [],
+        error: '',
+        editedTodo: ''
       }
-      this.$http.secured.post('/todos', { todo: { title: this.newTodo } })
-        .then(response => {
-          this.todos.push(response.data)
-          this.newTodo = ''
-        })
-        .catch(error => this.setError(error, 'Cannot create todo'))
     },
-    removeTodo (todo) {
-      this.$http.secured.delete(`/todos/${todo.id}`)
-        .then(response => this.todos.splice(this.todos.indexOf(todo), 1))
-        .catch(error => this.setError(error, 'Cannot delete todo'))
+    created () {
+      if (!this.$store.state.signedIn) {
+        this.$router.replace('/')
+      } else {
+        this.$http.secured.get('/todos')
+          .then(response => { this.todos = response.data })
+          .catch(error => { this.setError(error, 'Something went wrong') })
+      }
     },
-    editTodo (todo) {
-      this.editedTodo = todo
+    methods: {
+      setError (error, text) {
+        this.error = (error.response && error.response.data && error.response.data.error) || text
+      },
+      addTodo () {
+        const value = this.newTodo && this.newTodo.trim()
+        if (!value) {
+          return
+        }
+        this.$http.secured.post('/todos', { todo: { title: this.newTodo } })
+          .then(response => {
+            this.todos.push(response.data)
+            this.newTodo = ''
+          })
+          .catch(error => this.setError(error, 'Cannot create todo'))
+      },
+      removeTodo (todo) {
+        this.$http.secured.delete(`/todos/${todo.id}`)
+          .then(response => this.todos.splice(this.todos.indexOf(todo), 1))
+          .catch(error => this.setError(error, 'Cannot delete todo'))
+      },
+      editTodo (todo) {
+        this.editedTodo = todo
+      },
+      updateTodo (todo) {
+        this.editedTodo = ''
+        this.$http.secured.patch(`/todos/${todo.id}`, { todo: { title: todo.title } })
+          .catch(error => this.setError(error, 'Cannot update todo'))
+      }
     },
-    updateTodo (todo) {
-      this.editedTodo = ''
-      this.$http.secured.patch(`/todos/${todo.id}`, { todo: { title: todo.title } })
-        .catch(error => this.setError(error, 'Cannot update todo'))
+    directives: {
+      'todo-focus': function (el) {
+        el.focus()
+      }
     },
-    signOut () {
-      this.$http.secured.delete('/signin')
-        .then(response => {
-          this.$store.commit('unsetCurrentUser')
-          this.$router.replace('/')
-        })
-        .catch(error => this.setError(error, 'Cannot sign out'))
-    }
-  },
-  directives: {
-    'todo-focus': function (el) {
-      el.focus()
-    }
+    components: { AppHeader }
   }
-}
 </script>
 
 <style lang="css">
-.todos ul li i.fa.fa-trash-alt {
-  visibility: hidden;
-  margin-top: 5px;
-}
-.todos ul li:hover {
-  background: #fcfcfc;
-}
+  .todos ul li i.fa.fa-trash-alt {
+    cursor: pointer;
+    visibility: hidden;
+    margin-top: 5px;
+  }
+  .todos ul li:hover {
+    background: #fcfcfc;
+  }
 
-.todos ul li:hover i.fa.fa-trash-alt {
-  visibility: visible;
-}
-
-.sign-out label {
-  cursor: pointer;
-}
+  .todos ul li:hover i.fa.fa-trash-alt {
+    visibility: visible;
+  }
 </style>
