@@ -42,7 +42,8 @@ export default {
     }
   },
   created () {
-    if (!localStorage.signedIn) {
+    console.log(this.$store.state.signedIn)
+    if (!this.$store.state.signedIn) {
       this.$router.replace('/')
     } else {
       this.$http.secured.get('/todos')
@@ -82,8 +83,7 @@ export default {
     signOut () {
       this.$http.secured.delete('/signin')
         .then(response => {
-          delete localStorage.csrf
-          delete localStorage.signedIn
+          this.$store.commit('unsetCurrentUser')
           this.$router.replace('/')
         })
         .catch(error => this.setError(error, 'Cannot sign out'))
