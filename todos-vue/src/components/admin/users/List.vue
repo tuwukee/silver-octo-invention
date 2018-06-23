@@ -19,7 +19,9 @@
           <td>{{ user.email }}</td>
           <td>{{ user.role }}</td>
           <td v-if="showTodosLink()">
-            <i class="fa fa-list-ul"></i>
+            <router-link :to="`/admin/users/${user.id}/todos`">
+              <i class="fa fa-list-ul"></i>
+            </router-link>
           </td>
         </tr>
       </tbody>
@@ -60,7 +62,8 @@ export default {
 </script>
 
 <style lang="css">
-  i.fa {
+  a i.fa {
     cursor: pointer;
+    color: #212529;
   }
 </style>
