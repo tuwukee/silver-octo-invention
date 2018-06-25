@@ -21,7 +21,7 @@ class TodosController < ApplicationController
     if @todo.save
       render json: @todo, status: :created, location: @todo
     else
-      render json: @todo.errors, status: :unprocessable_entity
+      render json: { error: @todo.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +30,7 @@ class TodosController < ApplicationController
     if @todo.update(todo_params)
       render json: @todo
     else
-      render json: @todo.errors, status: :unprocessable_entity
+      render json: { error: @todo.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
   end
 

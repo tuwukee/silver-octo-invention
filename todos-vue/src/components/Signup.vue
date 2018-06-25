@@ -48,18 +48,20 @@ export default {
         this.signupFailed(response)
         return
       }
-      localStorage.csrf = response.data.csrf
-      localStorage.signedIn = true
-      this.error = ''
-      this.$router.replace('/todos')
+      this.$http.plain.get('/me')
+        .then(meResponse => {
+          this.$store.commit('setCurrentUser', { currentUser: meResponse.data, csrf: response.data.csrf })
+          this.error = ''
+          this.$router.replace('/todos')
+        })
+        .catch(error => this.signupFailed(error))
     },
     signupFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
-      delete localStorage.csrf
-      delete localStorage.signedIn
+      this.$store.commit('unsetCurrentUser')
     },
     checkSignedIn () {
-      if (localStorage.signedIn) {
+      if (this.$store.state.signedIn) {
         this.$router.replace('/todos')
       }
     }
@@ -68,10 +70,10 @@ export default {
 </script>
 
 <style lang="css">
-.form-signup {
-  width: 70%;
-  max-width: 500px;
-  padding: 10% 15px;
-  margin: 0 auto;
-}
+  .form-signup {
+    width: 70%;
+    max-width: 500px;
+    padding: 10% 15px;
+    margin: 0 auto;
+  }
 </style>

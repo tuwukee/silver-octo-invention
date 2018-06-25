@@ -14,6 +14,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require_relative 'support/auth_helper'
 require_relative 'support/response_helper'
 
 RSpec.configure do |config|
@@ -41,6 +42,7 @@ RSpec.configure do |config|
   end
 
   config.include ResponseHelper
+  config.include AuthHelper
 
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will
   # have no way to turn it off -- the option exists only for backwards

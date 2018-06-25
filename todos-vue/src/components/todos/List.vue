@@ -1,9 +1,6 @@
 <template>
   <div class="todos">
-    <div class="sign-out float-right">
-      <label @click="signOut">Sign out</label>
-    </div>
-    <br />
+    <AppHeader></AppHeader>
     <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <h3>Todos</h3>
     <input class="form-control"
@@ -31,6 +28,8 @@
 </template>
 
 <script>
+import AppHeader from '@/components/AppHeader'
+
 export default {
   name: 'List',
   data () {
@@ -42,7 +41,7 @@ export default {
     }
   },
   created () {
-    if (!localStorage.signedIn) {
+    if (!this.$store.state.signedIn) {
       this.$router.replace('/')
     } else {
       this.$http.secured.get('/todos')
@@ -78,39 +77,28 @@ export default {
       this.editedTodo = ''
       this.$http.secured.patch(`/todos/${todo.id}`, { todo: { title: todo.title } })
         .catch(error => this.setError(error, 'Cannot update todo'))
-    },
-    signOut () {
-      this.$http.secured.delete('/signin')
-        .then(response => {
-          delete localStorage.csrf
-          delete localStorage.signedIn
-          this.$router.replace('/')
-        })
-        .catch(error => this.setError(error, 'Cannot sign out'))
     }
   },
   directives: {
     'todo-focus': function (el) {
       el.focus()
     }
-  }
+  },
+  components: { AppHeader }
 }
 </script>
 
 <style lang="css">
-.todos ul li i.fa.fa-trash-alt {
-  visibility: hidden;
-  margin-top: 5px;
-}
-.todos ul li:hover {
-  background: #fcfcfc;
-}
+  .todos ul li i.fa.fa-trash-alt {
+    cursor: pointer;
+    visibility: hidden;
+    margin-top: 5px;
+  }
+  .todos ul li:hover {
+    background: #fcfcfc;
+  }
 
-.todos ul li:hover i.fa.fa-trash-alt {
-  visibility: visible;
-}
-
-.sign-out label {
-  cursor: pointer;
-}
+  .todos ul li:hover i.fa.fa-trash-alt {
+    visibility: visible;
+  }
 </style>
