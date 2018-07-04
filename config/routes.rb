@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   get 'me', controller: :users, action: :me
 
   resources :todos
+  resources :password_resets, only: [:create] do
+    collection do
+      get ':token', action: :edit, as: :edit
+      patch ':token', action: :update
+    end
+  end
 
   namespace :admin do
     resources :users, only: [:index] do
