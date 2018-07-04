@@ -1,5 +1,5 @@
 <template>
-  <form class="form-signup" @submit.prevent="signup">
+  <form class="form-app form-signup" @submit.prevent="signup">
     <div class="alert alert-danger" v-if="error">{{ error }}</div>
     <div class="form-group">
       <label for="email">Email address</label>
@@ -16,6 +16,8 @@
     <button type="submit" class="btn btn-primary mb-3">Sign up</button>
     <div>
       <router-link to="/">Sign in</router-link>
+      <br />
+      <router-link to="/forgot_password">Forgot Password</router-link>
     </div>
   </form>
 </template>
@@ -69,11 +71,3 @@ export default {
 }
 </script>
 
-<style lang="css">
-  .form-signup {
-    width: 70%;
-    max-width: 500px;
-    padding: 10% 15px;
-    margin: 0 auto;
-  }
-</style>
