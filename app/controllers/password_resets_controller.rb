@@ -19,6 +19,7 @@ class PasswordResetsController < ApplicationController
   def update
     @user.update!(password_params)
     @user.clear_password_token!
+    JWTSessions::Session.new(namespace: "user_#{@user.id}").flush_namespaced
     render json: :ok
   end
 
