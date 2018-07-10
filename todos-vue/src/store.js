@@ -15,6 +15,9 @@ export const store = new Vuex.Store({
     },
     isManager (state) {
       return state.currentUser && state.currentUser.role === 'manager'
+    },
+    currentUserId (state) {
+      return state.currentUser && state.currentUser.id
     }
   },
   mutations: {

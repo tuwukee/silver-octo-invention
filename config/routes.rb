@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :users, only: [:index] do
+    resources :users, only: [:index, :show, :update] do
       resources :todos, only: [:index], controller: 'users/todos'
     end
   end

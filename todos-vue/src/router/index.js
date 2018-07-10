@@ -6,6 +6,7 @@ import ForgotPassword from '@/components/ForgotPassword'
 import ResetPassword from '@/components/ResetPassword'
 import TodosList from '@/components/todos/List'
 import UsersList from '@/components/admin/users/List'
+import UserEdit from '@/components/admin/users/Edit'
 import UserTodosList from '@/components/admin/users/todos/List'
 
 Vue.use(Router)
@@ -46,6 +47,11 @@ export default new Router({
       path: '/admin/users/:id/todos',
       name: 'UserTodosList',
       component: UserTodosList
+    },
+    {
+      path: '/admin/users/:id',
+      name: 'UserEdit',
+      component: UserEdit
     }
   ]
 })
