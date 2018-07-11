@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include ActiveModel::Serializers::JSON
   has_secure_password
   has_many :todos
 
@@ -8,6 +9,10 @@ class User < ApplicationRecord
             format: { with: URI::MailTo::EMAIL_REGEXP },
             presence: true,
             uniqueness: { case_sensitive: false }
+
+  def attributes
+    { id: id, email: email, role: role }
+  end
 
   def generate_password_token!
     begin
