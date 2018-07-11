@@ -31,9 +31,6 @@ export default {
   created () {
     this.checkPasswordToken()
   },
-  updated () {
-    this.checkPasswordToken()
-  },
   methods: {
     reset () {
       this.$http.plain.patch(`/password_resets/${this.$route.params.token}`, { password: this.password, password_confirmation: this.password_confirmation })

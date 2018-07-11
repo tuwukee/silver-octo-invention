@@ -16,7 +16,7 @@
       </div>
       <button type="submit" class="btn btn-primary mb-3">Update</button>
       <div>
-        <router-link to="/admin/users">Users</router-link>
+        <router-link to="/admin/users">Back To Users List</router-link>
       </div>
     </form>
   </div>

@@ -7,18 +7,18 @@ class Admin::UsersController < ApplicationController
   def index
     @users = User.all
 
-    render json: @users.as_json(only: [:id, :email, :role])
+    render json: @users
   end
 
   def show
-    render json: @user.as_json(only: [:id, :email, :role])
+    render json: @user
   end
 
   def update
     if current_user.id != @user.id
       @user.update!(user_params)
       JWTSessions::Session.new(namespace: "user_#{@user.id}").flush_namespaced_access_tokens
-      render json: @user.as_json(only: [:id, :email, :role])
+      render json: @user
     else
       render json: { error: 'Admin cannot modify their own role' }, status: :bad_request
     end
