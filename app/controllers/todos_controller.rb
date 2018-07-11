@@ -17,21 +17,14 @@ class TodosController < ApplicationController
   # POST /todos
   def create
     @todo = current_user.todos.build(todo_params)
-
-    if @todo.save
-      render json: @todo, status: :created, location: @todo
-    else
-      render json: { error: @todo.errors.full_messages.join(' ') }, status: :unprocessable_entity
-    end
+    @todo.save!
+    render json: @todo, status: :created, location: @todo
   end
 
   # PATCH/PUT /todos/1
   def update
-    if @todo.update(todo_params)
-      render json: @todo
-    else
-      render json: { error: @todo.errors.full_messages.join(' ') }, status: :unprocessable_entity
-    end
+    @todo.update!(todo_params)
+    render json: @todo
   end
 
   # DELETE /todos/1

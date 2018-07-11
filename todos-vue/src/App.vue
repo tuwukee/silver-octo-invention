@@ -20,4 +20,11 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
+
+.form-app {
+  width: 70%;
+  max-width: 500px;
+  padding: 10% 15px;
+  margin: 0 auto;
+}
 </style>
